@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ayuda · Observatorio Textil MX</title>
+<meta name="description" content="Manual de operación del Observatorio Textil, Moda y Calzado MX e interpretación de sus indicadores.">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .ayuda { max-width: 1120px; margin: 0 auto; padding: 1.5rem 16px 3rem; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 2rem; align-items: start; }
+  .indice { position: sticky; top: 1rem; font-size: .88rem; border-left: 3px solid var(--eje); padding-left: .9rem; }
+  .indice p { margin: 0 0 .4rem; font-weight: 650; }
+  .indice ol { margin: 0; padding-left: 1.1rem; }
+  .indice li { margin: .3rem 0; }
+  .indice a { color: var(--tinta-2); text-decoration: none; }
+  .indice a:hover { color: var(--acento); text-decoration: underline; }
+  .contenido { min-width: 0; }
+  .contenido section { background: var(--superficie); border: 1px solid var(--borde); border-radius: 10px; padding: 1.2rem 1.4rem; margin-bottom: 1rem; scroll-margin-top: 1rem; }
+  .contenido h2 { font-size: 1.25rem; margin-bottom: .6rem; }
+  .contenido h3 { font-size: 1rem; margin: 1.1rem 0 .4rem; }
+  .contenido p, .contenido li { max-width: 75ch; }
+  .contenido li { margin: .3rem 0; }
+  .contenido code { font-size: .88em; background: var(--lavado); padding: .05rem .3rem; border-radius: 4px; }
+  .caja { border-left: 4px solid var(--acento); background: var(--lavado); padding: .7rem 1rem; border-radius: 0 8px 8px 0; margin: .8rem 0; }
+  .caja.alerta { border-left-color: var(--seg-1); background: transparent; border: 1px solid var(--eje); border-left: 4px solid var(--seg-1); }
+  .formula { font-size: 1.05rem; text-align: center; padding: .9rem; margin: .8rem 0; border: 1px solid var(--eje); border-radius: 8px; }
+  .formula .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 .3rem; }
+  .formula .frac span:first-child { border-bottom: 1px solid var(--tinta-2); padding: 0 .4rem .15rem; }
+  .formula .frac span:last-child { padding: .15rem .4rem 0; }
+  .tabla td { white-space: normal; }
+  .tabla td:first-child { white-space: nowrap; font-weight: 600; }
+  .muestras { display: flex; flex-wrap: wrap; gap: .3rem .9rem; margin: .4rem 0; font-size: .9rem; }
+  .muestras span { display: inline-flex; align-items: center; gap: .35rem; }
+  .muestras i { width: 14px; height: 12px; border-radius: 3px; display: inline-block; border: 1px solid var(--borde); }
+  .volver { color: #fff; font-weight: 600; text-decoration: none; display: inline-block; padding: .7rem 0; }
+  .volver:hover { text-decoration: underline; }
+  kbd { font: inherit; font-size: .82em; border: 1px solid var(--eje); border-bottom-width: 2px; border-radius: 4px; padding: 0 .3rem; }
+  @media (max-width: 820px) { .ayuda { grid-template-columns: 1fr; } .indice { position: static; } }
+</style>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-int">
+    <p class="ceja">Manual de operación</p>
+    <h1>Cómo usar e interpretar el Observatorio</h1>
+    <p class="subt">Guía para operar la página y leer correctamente sus indicadores.</p>
+  </div>
+  <nav class="pestanas"><a class="volver" href="index.html">← Volver al Observatorio</a></nav>
+</header>
+
+<div class="ayuda">
+  <nav class="indice" aria-label="Contenido">
+    <p>Contenido</p>
+    <ol>
+      <li><a href="#s-inicio">Inicio rápido</a></li>
+      <li><a href="#s-filtros">Filtros</a></li>
+      <li><a href="#s-panorama">Panorama</a></li>
+      <li><a href="#s-mapa">Mapa territorial</a></li>
+      <li><a href="#s-cadena">Cadena de valor</a></li>
+      <li><a href="#s-indicadores">Interpretar los indicadores</a></li>
+      <li><a href="#s-cl">El cociente de localización</a></li>
+      <li><a href="#s-precauciones">Precauciones</a></li>
+      <li><a href="#s-recetas">Preguntas frecuentes de análisis</a></li>
+      <li><a href="#s-fuentes">Fuentes y glosario</a></li>
+    </ol>
+  </nav>
+
+  <div class="contenido">
+
+<section id="s-inicio">
+  <h2>1. Inicio rápido</h2>
+  <p>El Observatorio muestra los <strong>447,048 establecimientos</strong> de la cadena textil, de la moda y el calzado registrados en el DENUE de INEGI (mayo de 2026). Los clasifica en <strong>10 eslabones</strong> que agrupan 54 clases de actividad SCIAN.</p>
+  <ol>
+    <li><strong>Abrir la página.</strong> En Windows, doble clic en <code>iniciar_app.bat</code>; en Mac, en <code>iniciar_app.command</code>. Se abre <code>http://localhost:8765</code> en el navegador. Mientras uses la página, deja abierta la ventana negra (el servidor).</li>
+    <li><strong>Elegir qué mirar</strong> con la barra de filtros: entidad, eslabones y tamaño.</li>
+    <li><strong>Cambiar de apartado</strong> con las pestañas: <em>Panorama</em>, <em>Mapa territorial</em> y <em>Cadena de valor</em>. Los filtros se conservan al cambiar de pestaña.</li>
+    <li><strong>Compartir lo que ves:</strong> copia la dirección del navegador. La URL guarda la pestaña, los filtros y el modo del mapa.</li>
+  </ol>
+  <div class="caja">Los colores son siempre los mismos en toda la página:
+    <div class="muestras">
+      <span><i style="background:var(--seg-0)"></i>Manufactura</span>
+      <span><i style="background:var(--seg-1)"></i>Comercio</span>
+      <span><i style="background:var(--seg-2)"></i>Diseño (candidatos)</span>
+    </div>
+  </div>
+</section>
+
+<section id="s-filtros">
+  <h2>2. Filtros</h2>
+  <p>La barra de filtros está en la parte superior y afecta a los tres apartados al mismo tiempo.</p>
+  <table class="tabla">
+    <thead><tr><th>Filtro</th><th>Qué hace</th></tr></thead>
+    <tbody>
+      <tr><td>Entidad</td><td>Limita todo a un estado. El mapa se acerca a él y las gráficas de “entidades” pasan a mostrar sus municipios. <em>Todo el país</em> quita el filtro.</td></tr>
+      <tr><td>Eslabones</td><td>Cada botón activa o desactiva un eslabón; el punto de color indica su segmento. Mantén <kbd>Ctrl</kbd> (o <kbd>Alt</kbd>; <kbd>⌘</kbd> en Mac) al hacer clic para dejar <strong>solo ese</strong> eslabón. El enlace <em>todos</em> los vuelve a activar. Siempre queda al menos uno activo.</td></tr>
+      <tr><td>Personal ocupado</td><td>Filtra por rango de tamaño del establecimiento (número de personas que trabajan en él), según el DENUE.</td></tr>
+      <tr><td>Restablecer</td><td>Regresa a todo el país, todos los eslabones y todos los tamaños.</td></tr>
+    </tbody>
+  </table>
+  <p>Al pasar el cursor sobre un botón de eslabón se ven su código SCIAN y una descripción breve.</p>
+  <h3>Los 10 eslabones</h3>
+  <table class="tabla">
+    <thead><tr><th>Eslabón</th><th>SCIAN</th><th>Incluye</th></tr></thead>
+    <tbody>
+      <tr><td>Insumos y acabado textil</td><td>313</td><td>Hilado de fibras, fabricación de telas, acabado textil</td></tr>
+      <tr><td>Productos textiles</td><td>314</td><td>Alfombras, blancos, cortinas, bordado, cordelería, costales</td></tr>
+      <tr><td>Prendas de vestir</td><td>315</td><td>Confección en serie y sobre medida, tejido de punto, uniformes, sombreros</td></tr>
+      <tr><td>Curtido de cuero</td><td>3161</td><td>Curtido y acabado de cuero y piel</td></tr>
+      <tr><td>Calzado y bolsos</td><td>3162, 316991</td><td>Calzado de piel, tela, plástico y hule; huaraches; bolsos y maletas</td></tr>
+      <tr><td>Comercio mayorista</td><td>4321</td><td>Mayoreo de fibras, telas, blancos, cueros, ropa y calzado</td></tr>
+      <tr><td>Tiendas de textiles</td><td>4631</td><td>Telas, blancos, mercería y bonetería</td></tr>
+      <tr><td>Ropa y accesorios</td><td>4632</td><td>Ropa, ropa de bebé, lencería, disfraces, bisutería, artículos de piel, sombreros (sin pañales)</td></tr>
+      <tr><td>Zapaterías</td><td>463310</td><td>Comercio al por menor de calzado</td></tr>
+      <tr><td>Diseño especializado (candidatos)</td><td>541490</td><td>Diseño de modas <em>y otros diseños especializados</em></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="s-panorama">
+  <h2>3. Panorama</h2>
+  <h3>Tarjetas de indicadores</h3>
+  <ul>
+    <li><strong>Establecimientos:</strong> total con los filtros aplicados. Debajo aparece el ámbito (México o la entidad elegida).</li>
+    <li><strong>Manufactura, Comercio y Diseño:</strong> cuántos establecimientos hay en cada segmento y qué porcentaje del total representan.</li>
+    <li><strong>Micronegocios:</strong> porcentaje de establecimientos con 0 a 5 personas ocupadas.</li>
+  </ul>
+  <h3>Gráficas</h3>
+  <ul>
+    <li><strong>Establecimientos por eslabón:</strong> cuánto pesa cada eslabón. Los eslabones desactivados en el filtro aparecen en cero.</li>
+    <li><strong>Entidades con más establecimientos:</strong> las 15 entidades principales. Si eliges una entidad en el filtro, muestra sus 15 municipios principales.</li>
+    <li><strong>Tamaño por personal ocupado:</strong> distribución por rango de personal.</li>
+    <li><strong>Año de incorporación al DENUE:</strong> cuándo entraron o se actualizaron los registros. <em>No</em> indica el año de apertura del negocio (ver <a href="#s-precauciones">Precauciones</a>).</li>
+  </ul>
+  <p>Pasa el cursor sobre una barra para ver su valor y porcentaje. <em>Ver datos</em>, bajo cada gráfica, despliega la tabla con todas las cifras. Puedes seleccionarla y copiarla a Excel.</p>
+  <h3>Tabla de municipios</h3>
+  <ul>
+    <li>Ordénala <strong>por establecimientos</strong> (tamaño absoluto) o <strong>por CL</strong> (especialización relativa).</li>
+    <li>El buscador ignora acentos y busca también por entidad: escribe <code>moroleon</code> o <code>puebla</code>.</li>
+    <li>Muestra hasta 300 municipios. Para encontrar los demás, usa la búsqueda.</li>
+    <li><strong>Haz clic en una fila</strong> para abrir el mapa centrado en ese municipio.</li>
+  </ul>
+</section>
+
+<section id="s-mapa">
+  <h2>4. Mapa territorial</h2>
+  <p>El panel de la derecha permite elegir entre tres vistas:</p>
+  <table class="tabla">
+    <thead><tr><th>Vista</th><th>Qué muestra</th><th>Úsala para</th></tr></thead>
+    <tbody>
+      <tr><td>Puntos</td><td>Cada establecimiento como un punto, coloreado por segmento. La manufactura se dibuja sobre el comercio para que no quede oculta.</td><td>Ver concentraciones, corredores y clústeres locales; ubicar establecimientos concretos.</td></tr>
+      <tr><td>Por entidad</td><td>Número de establecimientos seleccionados por estado, en cinco clases de azul (quintiles).</td><td>Comparar volumen entre estados.</td></tr>
+      <tr><td>Especialización</td><td>Cociente de localización (CL) por estado. En rojo, donde el eslabón pesa más que en el país; en azul, donde pesa menos.</td><td>Identificar vocaciones productivas regionales.</td></tr>
+    </tbody>
+  </table>
+  <h3>Navegación</h3>
+  <ul>
+    <li><strong>Acercar o alejar:</strong> rueda del ratón, gesto de pellizco o botones <kbd>+</kbd> <kbd>−</kbd>. <strong>Desplazar:</strong> arrastrar.</li>
+    <li><strong>Pasar el cursor</strong> sobre un punto muestra su clase de actividad, eslabón, municipio y tamaño. Sobre un estado, muestra su total y su CL.</li>
+    <li><strong>Clic en un punto:</strong> en el panel aparecen el nombre del establecimiento, la localidad y el año de alta.</li>
+    <li><strong>Clic en un estado</strong> (en las vistas por entidad o especialización): lo selecciona en el filtro y acerca el mapa.</li>
+  </ul>
+  <div class="caja">A escala nacional los puntos se superponen. Para ver la estructura real de una zona, acércate o filtra por entidad.</div>
+</section>
+
+<section id="s-cadena">
+  <h2>5. Cadena de valor</h2>
+  <p>El diagrama ordena los eslabones de izquierda a derecha: <strong>insumos → transformación → distribución → venta al público</strong>. El diseño aparece arriba, conectado con prendas y calzado.</p>
+  <ul>
+    <li>Cada caja muestra el número de establecimientos y su porcentaje dentro de la cadena, según la entidad y el tamaño filtrados. La barrita inferior compara su tamaño con el del eslabón más grande.</li>
+    <li><strong>Clic en una caja</strong> para incluirla o excluirla del filtro de eslabones. Las cajas excluidas se ven atenuadas.</li>
+    <li>La tabla inferior desglosa las <strong>clases SCIAN</strong> de los eslabones activos y el peso de cada clase dentro de su eslabón.</li>
+  </ul>
+  <div class="caja alerta">Las flechas representan el <strong>flujo típico</strong> de bienes en la cadena. No son transacciones medidas: el DENUE no registra quién compra a quién.</div>
+</section>
+
+<section id="s-indicadores">
+  <h2>6. Cómo interpretar los indicadores</h2>
+  <table class="tabla">
+    <thead><tr><th>Indicador</th><th>Definición</th><th>Cómo leerlo</th></tr></thead>
+    <tbody>
+      <tr><td>Establecimientos</td><td>Unidades económicas fijas o semifijas en el DENUE, en una ubicación física.</td><td>Mide <strong>presencia</strong> de la actividad, no tamaño económico. Un taller de 2 personas y una planta de 500 cuentan igual.</td></tr>
+      <tr><td>% del total</td><td>Establecimientos de un segmento o eslabón entre el total filtrado.</td><td>Composición de la cadena en el ámbito elegido.</td></tr>
+      <tr><td>Micronegocios</td><td>% de establecimientos con 0 a 5 personas ocupadas.</td><td>Valores altos indican una estructura atomizada: talleres familiares y comercio pequeño.</td></tr>
+      <tr><td>% del sector en el municipio</td><td>Establecimientos de los eslabones seleccionados entre todos los del sector textil-moda del municipio.</td><td>Qué tan dominante es la actividad elegida dentro del sector local.</td></tr>
+      <tr><td>CL (cociente de localización)</td><td>Ver la siguiente sección.</td><td>Especialización relativa frente al país.</td></tr>
+      <tr><td>Año de incorporación al DENUE</td><td>Fecha en que INEGI dio de alta o actualizó el registro.</td><td>Sirve para saber qué tan reciente es la información, no para medir la creación de negocios.</td></tr>
+    </tbody>
+  </table>
+  <h3>Volumen frente a especialización</h3>
+  <p>El <strong>volumen</strong> (número de establecimientos) depende mucho del tamaño de la población: el Estado de México y la Ciudad de México casi siempre aparecen arriba. La <strong>especialización</strong> (CL) corrige ese efecto y revela vocaciones. Lo recomendable es mirar ambos: un municipio importante para la cadena suele tener volumen alto <em>y</em> CL alto.</p>
+</section>
+
+<section id="s-cl">
+  <h2>7. El cociente de localización (CL)</h2>
+  <p>El CL compara el peso de una actividad en un territorio con el peso que tiene en todo el país:</p>
+  <div class="formula">
+    CL =
+    <span class="frac"><span>establecimientos del eslabón en el territorio</span><span>establecimientos del sector en el territorio</span></span>
+    ÷
+    <span class="frac"><span>establecimientos del eslabón en el país</span><span>establecimientos del sector en el país</span></span>
+  </div>
+  <p>Aquí, el “sector” es el conjunto de los 10 eslabones textil-moda-calzado, filtrado por tamaño si aplicaste ese filtro.</p>
+  <h3>Ejemplo: calzado en Guanajuato</h3>
+  <ul>
+    <li>En Guanajuato, 5,631 de sus 34,110 establecimientos del sector son de <em>Calzado y bolsos</em>: el <strong>16.5 %</strong>.</li>
+    <li>En todo el país, la proporción es de 11,333 de 447,048: el <strong>2.5 %</strong>.</li>
+    <li>CL = 16.5 % ÷ 2.5 % ≈ <strong>6.5</strong>. En Guanajuato, el calzado pesa 6.5 veces más dentro del sector que en el promedio nacional.</li>
+    <li>En el municipio de León, el CL es de <strong>11.5</strong> (3,583 de 12,333 establecimientos).</li>
+  </ul>
+  <h3>Escala de lectura</h3>
+  <table class="tabla">
+    <thead><tr><th>CL</th><th>Lectura</th></tr></thead>
+    <tbody>
+      <tr><td>Menor de 0.5</td><td>La actividad está claramente subrepresentada.</td></tr>
+      <tr><td>0.5 a 0.8</td><td>Por debajo del promedio nacional.</td></tr>
+      <tr><td>0.8 a 1.25</td><td>Similar al promedio nacional (sin especialización).</td></tr>
+      <tr><td>1.25 a 2</td><td>Especialización moderada.</td></tr>
+      <tr><td>2 o más</td><td>Especialización marcada: posible clúster o vocación productiva.</td></tr>
+    </tbody>
+  </table>
+  <h3>Reglas de uso</h3>
+  <ul>
+    <li><strong>Selecciona uno o pocos eslabones.</strong> Con todos activos, el CL vale 1 en todas partes y no informa nada; por eso la página lo muestra como “—”.</li>
+    <li>El CL mide especialización <strong>dentro del sector textil-moda</strong>, no frente a toda la economía local. Un CL alto de calzado significa que, entre los negocios textiles y de moda del lugar, el calzado domina; no que el municipio dependa del calzado.</li>
+    <li>Con pocos establecimientos el CL se vuelve inestable. Por eso solo se calcula para municipios con <strong>30 o más</strong> establecimientos del sector.</li>
+    <li>El CL se basa en <strong>número de establecimientos</strong>, no en empleo ni en producción.</li>
+  </ul>
+</section>
+
+<section id="s-precauciones">
+  <h2>8. Precauciones al interpretar</h2>
+  <ul>
+    <li><strong>Establecimientos no son empresas.</strong> Una cadena de tiendas con 300 sucursales aparece 300 veces.</li>
+    <li><strong>Cobertura del DENUE.</strong> Solo incluye establecimientos con ubicación física fija o semifija. No capta el trabajo a domicilio ni la maquila informal sin local, que son comunes en la confección, ni el comercio exclusivamente en línea.</li>
+    <li><strong>Actividad principal.</strong> Cada establecimiento tiene una sola clase SCIAN. Un negocio que también vende ropa, pero cuya actividad principal es otra, no aparece.</li>
+    <li><strong>Diseño (541490) son candidatos.</strong> La clase incluye diseño gráfico, industrial y otros. El número de establecimientos de diseño de moda real es menor.</li>
+    <li><strong>Año de incorporación.</strong> Los picos (2010, 2014, 2019, 2024) coinciden con rondas de actualización de INEGI tras los Censos Económicos. No son olas de apertura de negocios.</li>
+    <li><strong>Personal ocupado en rangos.</strong> El DENUE no da el número exacto. No es posible sumar empleo a partir de esta página.</li>
+    <li><strong>Exclusión.</strong> La clase 463217 (pañales desechables) se excluyó del comercio de ropa.</li>
+    <li><strong>Nombres.</strong> Se muestra el nombre comercial registrado en el DENUE, tal como aparece. Para datos de contacto, consulta directamente el DENUE.</li>
+  </ul>
+</section>
+
+<section id="s-recetas">
+  <h2>9. Preguntas frecuentes de análisis</h2>
+  <h3>¿Dónde están los clústeres de confección?</h3>
+  <p>Activa solo <em>Prendas de vestir</em> (<kbd>Ctrl</kbd>+clic) → Mapa → <em>Especialización</em>. Después ve a Panorama → tabla de municipios → <em>Ordenar por CL</em> y revisa los que tienen volumen relevante.</p>
+  <h3>¿Qué tan integrada está la cadena en mi estado?</h3>
+  <p>Elige la entidad → <em>Cadena de valor</em>. Compara el peso de los eslabones de manufactura con los de comercio. Una entidad con mucho comercio y poca manufactura vende sobre todo producto de fuera.</p>
+  <h3>¿Dónde hay fabricantes medianos y grandes?</h3>
+  <p>Activa los eslabones de manufactura y, en <em>Personal ocupado</em>, deja solo de <em>31 a 50</em> en adelante → Mapa → Puntos.</p>
+  <h3>¿Cuál es el perfil de un municipio concreto?</h3>
+  <p>Panorama → busca el municipio en la tabla → anota su total. Luego activa cada eslabón por separado para ver su CL. Al hacer clic en la fila lo ves en el mapa.</p>
+  <h3>¿Cómo comparto una vista?</h3>
+  <p>Copia la URL del navegador. Por ejemplo, <code>#mapa&amp;capas=4&amp;modo=cl</code> abre el mapa de especialización en calzado. La URL solo funciona para quien tenga la página abierta en su equipo (o publicada en un servidor).</p>
+</section>
+
+<section id="s-fuentes">
+  <h2>10. Fuentes y glosario</h2>
+  <ul>
+    <li><strong>Establecimientos:</strong> INEGI, Directorio Estadístico Nacional de Unidades Económicas (DENUE), edición 05/2026.</li>
+    <li><strong>Límites estatales:</strong> INEGI, Marco Geoestadístico, diciembre de 2025, simplificados para visualización.</li>
+    <li><strong>Clasificación:</strong> INEGI, Sistema de Clasificación Industrial de América del Norte (SCIAN) México.</li>
+    <li><strong>Mapa base:</strong> © OpenStreetMap, © CARTO.</li>
+  </ul>
+  <table class="tabla">
+    <thead><tr><th>Término</th><th>Significado</th></tr></thead>
+    <tbody>
+      <tr><td>DENUE</td><td>Directorio de INEGI con la ubicación y actividad de las unidades económicas activas del país.</td></tr>
+      <tr><td>SCIAN</td><td>Clasificación de actividades económicas. Sus dígitos van de lo general a lo particular: 31–33 manufactura, 315 prendas, 315223 uniformes.</td></tr>
+      <tr><td>Eslabón</td><td>Grupo de clases SCIAN que cumplen una función similar en la cadena.</td></tr>
+      <tr><td>Segmento</td><td>Agrupación de eslabones en manufactura, comercio o diseño.</td></tr>
+      <tr><td>Establecimiento</td><td>Unidad económica en una sola ubicación física.</td></tr>
+      <tr><td>CL</td><td>Cociente de localización: indicador de especialización relativa.</td></tr>
+      <tr><td>Quintil</td><td>Cada una de cinco clases con igual número de entidades, usadas en el mapa por entidad.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Observatorio Textil MX</title>
+<meta name="description" content="Establecimientos de la industria y el comercio textil, de la moda y el calzado en México (DENUE 05/2026).">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-int">
+    <p class="ceja">Fase 1 · DENUE 05/2026</p>
+    <h1>Observatorio Textil, Moda y Calzado MX</h1>
+    <p class="subt">Establecimientos de manufactura, comercio y diseño de la cadena textil, de la moda y el calzado en México.</p>
+  </div>
+  <nav class="pestanas" role="tablist" aria-label="Secciones">
+    <button role="tab" aria-selected="true" data-tab="panorama">Panorama</button>
+    <button role="tab" aria-selected="false" data-tab="mapa">Mapa territorial</button>
+    <button role="tab" aria-selected="false" data-tab="cadena">Cadena de valor</button>
+    <a class="ayuda-enlace" href="ayuda.html">Ayuda e interpretación</a>
+  </nav>
+</header>
+
+<section class="filtros" aria-label="Filtros">
+  <div class="filtro">
+    <label for="f-ent">Entidad</label>
+    <select id="f-ent"><option value="">Todo el país</option></select>
+  </div>
+  <div class="filtro filtro-ancho">
+    <span class="flabel">Eslabones <button class="enlace" id="f-capas-todas" type="button">todos</button></span>
+    <div class="chips" id="f-capas"></div>
+  </div>
+  <div class="filtro">
+    <span class="flabel">Personal ocupado</span>
+    <div class="chips" id="f-tam"></div>
+  </div>
+  <button class="boton-sec" id="f-reset" type="button">Restablecer</button>
+</section>
+
+<main>
+  <div id="cargando" class="cargando">Cargando 447 mil establecimientos…</div>
+
+  <!-- PANORAMA -->
+  <section id="tab-panorama" class="tab" role="tabpanel">
+    <div class="kpis" id="kpis"></div>
+
+    <div class="rejilla">
+      <article class="tarjeta">
+        <h2>Establecimientos por eslabón</h2>
+        <p class="nota">Recuento de establecimientos, no de empresas: una empresa puede tener varias sucursales.</p>
+        <div class="leyenda" id="ley-seg"></div>
+        <div class="grafica" id="g-capas"></div>
+        <details><summary>Ver datos</summary><div id="t-capas"></div></details>
+      </article>
+
+      <article class="tarjeta">
+        <h2 id="g-ent-tit">Entidades con más establecimientos</h2>
+        <p class="nota">Selección actual de eslabones y tamaños.</p>
+        <div class="grafica" id="g-ent"></div>
+        <details><summary>Ver datos</summary><div id="t-ent"></div></details>
+      </article>
+
+      <article class="tarjeta">
+        <h2>Tamaño por personal ocupado</h2>
+        <p class="nota">Rangos del DENUE. Los micronegocios (0 a 5 personas) dominan la cadena.</p>
+        <div class="grafica" id="g-tam"></div>
+        <details><summary>Ver datos</summary><div id="t-tam"></div></details>
+      </article>
+
+      <article class="tarjeta">
+        <h2>Año de incorporación al DENUE</h2>
+        <p class="nota">Fecha en que INEGI incorporó o actualizó el registro. <strong>No es el año de apertura</strong>; los picos reflejan rondas de actualización del directorio.</p>
+        <div class="grafica" id="g-anio"></div>
+        <details><summary>Ver datos</summary><div id="t-anio"></div></details>
+      </article>
+    </div>
+
+    <article class="tarjeta tarjeta-completa">
+      <div class="tarjeta-cab">
+        <div>
+          <h2>Municipios</h2>
+          <p class="nota"><strong>CL</strong> = cociente de localización dentro del sector textil-moda: peso de los eslabones seleccionados en el municipio frente a su peso nacional. CL &gt; 1 indica especialización relativa. Se calcula solo para municipios con 30 o más establecimientos del sector. Clic en una fila para verla en el mapa.</p>
+        </div>
+        <div class="controles-tabla">
+          <input type="search" id="mun-buscar" placeholder="Buscar municipio…" aria-label="Buscar municipio">
+          <select id="mun-orden" aria-label="Ordenar por">
+            <option value="n">Ordenar por establecimientos</option>
+            <option value="cl">Ordenar por CL</option>
+          </select>
+        </div>
+      </div>
+      <div class="tabla-cont"><table class="tabla" id="t-mun"></table></div>
+    </article>
+  </section>
+
+  <!-- MAPA -->
+  <section id="tab-mapa" class="tab" role="tabpanel" hidden>
+    <div class="mapa-layout">
+      <div class="mapa-cont"><div id="mapa"></div></div>
+      <aside class="mapa-panel">
+        <div class="segmentado" role="radiogroup" aria-label="Vista del mapa">
+          <button role="radio" aria-checked="true" data-modo="puntos">Puntos</button>
+          <button role="radio" aria-checked="false" data-modo="conteo">Por entidad</button>
+          <button role="radio" aria-checked="false" data-modo="cl">Especialización</button>
+        </div>
+        <div id="mapa-leyenda" class="mapa-leyenda"></div>
+        <div id="mapa-info" class="mapa-info">
+          <p class="nota">Pasa el cursor sobre el mapa para ver detalles. Haz clic en un punto para ver el nombre del establecimiento.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- CADENA -->
+  <section id="tab-cadena" class="tab" role="tabpanel" hidden>
+    <article class="tarjeta tarjeta-completa">
+      <h2>Cadena de valor textil, moda y calzado</h2>
+      <p class="nota">Cada caja es un eslabón con su número de establecimientos (según entidad y tamaño seleccionados). Haz clic en una caja para incluirla o excluirla del filtro; los demás apartados se actualizan. Las flechas muestran el flujo típico de bienes, no transacciones medidas.</p>
+      <div class="leyenda" id="ley-seg2"></div>
+      <div id="cadena-svg" class="cadena"></div>
+    </article>
+    <article class="tarjeta tarjeta-completa">
+      <h2>Clases SCIAN de los eslabones seleccionados</h2>
+      <div class="tabla-cont"><table class="tabla" id="t-clases"></table></div>
+    </article>
+  </section>
+</main>
+
+<footer class="pie">
+  <p><strong>Fuente:</strong> INEGI, Directorio Estadístico Nacional de Unidades Económicas (DENUE), 05/2026. Límites estatales: INEGI, Marco Geoestadístico, diciembre de 2025 (simplificados). Mapa base: © OpenStreetMap, © CARTO.</p>
+  <p><strong>Alcance:</strong> 54 clases SCIAN de la cadena textil-moda-calzado; se excluye 463217 (pañales desechables). La clase 541490 incluye otros diseños especializados y se presenta como conjunto de candidatos. No se capturan establecimientos registrados en otras clases con moda como actividad secundaria.</p>
+</footer>
+
+<div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/deck.gl@9.0.38/dist.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
