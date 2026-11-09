@@ -1,10 +1,13 @@
-# Observatorio Textil, Moda y Calzado MX — Fase 1
+# Observatorio Textil, Moda y Calzado MX — Fases 1 y 2
 
 App web estática para explorar los 447,048 establecimientos del DENUE 05/2026
 de la cadena textil, de la moda y el calzado (54 clases SCIAN).
 
 ## Abrir la app
-Doble clic en `iniciar_app.bat`. Abre http://localhost:8765 en el navegador.
+**En línea (recomendado, también en Mac y teléfono):**
+https://jehernandezavila.github.io/observatorio-textil-mx/
+
+**Sin conexión, en Windows:** doble clic en `iniciar_app.bat`. Abre http://localhost:8765 en el navegador.
 (Los navegadores no permiten leer los datos abriendo `index.html` directamente.)
 Requiere conexión a internet para las bibliotecas (MapLibre, deck.gl) y el mapa base.
 
@@ -16,6 +19,13 @@ Requiere conexión a internet para las bibliotecas (MapLibre, deck.gl) y el mapa
   coropleta por entidad y mapa de especialización (CL).
 - **Cadena de valor**: diagrama de eslabones; clic en una caja para filtrar.
   Debajo, desglose por clase SCIAN.
+- **Perfil económico** (Fase 2): Censos Económicos 2024 (año 2023): personal
+  ocupado, valor agregado, productividad, remuneración media y % de personal
+  remunerado, por eslabón, entidad, municipio y clase SCIAN.
+- **Comercio exterior** (Fase 2): importaciones de México 2023–2025 por grupo
+  y capítulo del Sistema Armonizado (UN Comtrade).
+- **Ficha municipal** (Fase 2): resumen imprimible de un municipio: DENUE,
+  especialización (CL) por eslabón y perfil censal.
 
 Los filtros (entidad, eslabones, personal ocupado) aplican a los tres apartados.
 La URL guarda la vista, p. ej. `#mapa&capas=4&modo=cl` (especialización en calzado).
@@ -50,12 +60,29 @@ python preparar_datos.py
 ```
 Regenera `web/data/` (requiere pandas, numpy, geopandas).
 
+Fase 2 (Censos Económicos y comercio):
+```
+python descargar_ce2024.py   # consulta el SAIC de INEGI -> fuentes/ce2024/
+python preparar_fase2.py     # -> web/data/ce2024.json y comercio.json
+```
+`preparar_fase2.py` debe correr después de `preparar_datos.py` (usa `meta.json`).
+
+Para publicar los cambios en la página en línea: `git add -A`, `git commit` y
+`git push` desde esta carpeta; GitHub Pages se actualiza en 1 o 2 minutos.
+
 ## Notas metodológicas
 - Recuentos de establecimientos, no de empresas.
 - CL = (eslabones seleccionados / total textil-moda del territorio) ÷ (mismo cociente nacional).
   Mide especialización dentro del sector, no frente al total de la economía.
   Municipios con menos de 30 establecimientos del sector no reciben CL.
 - "Año de incorporación al DENUE" no es el año de apertura.
+- Censos Económicos: INEGI omite datos por confidencialidad (29 % de las celdas
+  entidad × clase y 69 % de las municipio × clase). Los totales de varias clases
+  suman solo las publicadas y se muestran como mínimos (≥) con su cobertura; los
+  cocientes se calculan con las clases publicadas y se omiten si cubren menos del
+  50 % de las unidades. Nunca se imputan valores.
+- Comercio: solo importaciones, todos los orígenes, dólares corrientes; 6310
+  forma parte del capítulo 63 y no se suma dos veces.
 - 541490 incluye otros diseños especializados: se trata como candidatos.
 - Solo se exportan nombre del establecimiento, actividad, tamaño y ubicación;
   no se incluyen teléfono, correo ni razón social.

@@ -11,7 +11,7 @@
 <body>
 <header class="cabecera">
   <div class="cabecera-int">
-    <p class="ceja">Fase 1 · DENUE 05/2026</p>
+    <p class="ceja">DENUE 05/2026 · Censos Económicos 2024 · UN Comtrade</p>
     <h1>Observatorio Textil, Moda y Calzado MX</h1>
     <p class="subt">Establecimientos de manufactura, comercio y diseño de la cadena textil, de la moda y el calzado en México.</p>
   </div>
@@ -19,6 +19,9 @@
     <button role="tab" aria-selected="true" data-tab="panorama">Panorama</button>
     <button role="tab" aria-selected="false" data-tab="mapa">Mapa territorial</button>
     <button role="tab" aria-selected="false" data-tab="cadena">Cadena de valor</button>
+    <button role="tab" aria-selected="false" data-tab="perfil">Perfil económico</button>
+    <button role="tab" aria-selected="false" data-tab="comercio">Comercio exterior</button>
+    <button role="tab" aria-selected="false" data-tab="ficha">Ficha municipal</button>
     <a class="ayuda-enlace" href="ayuda.html">Ayuda e interpretación</a>
   </nav>
 </header>
@@ -32,7 +35,7 @@
     <span class="flabel">Eslabones <button class="enlace" id="f-capas-todas" type="button">todos</button></span>
     <div class="chips" id="f-capas"></div>
   </div>
-  <div class="filtro">
+  <div class="filtro" id="filtro-tam" title="Los Censos Económicos no se desglosan por tamaño en esta consulta">
     <span class="flabel">Personal ocupado</span>
     <div class="chips" id="f-tam"></div>
   </div>
@@ -126,10 +129,92 @@
       <div class="tabla-cont"><table class="tabla" id="t-clases"></table></div>
     </article>
   </section>
+
+  <!-- PERFIL ECONÓMICO (CE2024) -->
+  <section id="tab-perfil" class="tab" role="tabpanel" hidden>
+    <div class="aviso">
+      <p><strong>Censos Económicos 2024</strong> (datos del año 2023). Aplican los filtros de entidad y eslabones; el de personal ocupado no.
+      Las <em>unidades económicas</em> censales no equivalen a los establecimientos del DENUE 2026.
+      Los valores con <strong>≥</strong> y barra clara son parciales: INEGI no publica algunas clases por confidencialidad. <a href="ayuda.html#s-perfil">Cómo leerlo</a></p>
+    </div>
+    <div class="kpis" id="p-kpis"></div>
+    <div class="selector-ind">
+      <span class="flabel" id="p-ind-etq">Indicador</span>
+      <div class="segmentado" role="radiogroup" aria-labelledby="p-ind-etq" id="p-ind"></div>
+    </div>
+    <div class="rejilla">
+      <article class="tarjeta">
+        <h2 id="p-capas-tit">Por eslabón</h2>
+        <p class="nota" id="p-ind-def"></p>
+        <div class="leyenda" id="ley-seg3"></div>
+        <div class="grafica" id="p-capas"></div>
+        <details><summary>Ver datos</summary><div id="pt-capas"></div></details>
+      </article>
+      <article class="tarjeta">
+        <h2>Empleo frente a valor agregado</h2>
+        <p class="nota">Participación de cada eslabón en el personal ocupado y en el valor agregado de la selección. Si un eslabón emplea mucho más de lo que aporta, su productividad es baja.</p>
+        <div class="leyenda" id="ley-mix"></div>
+        <div class="grafica" id="p-mix"></div>
+      </article>
+    </div>
+    <article class="tarjeta tarjeta-completa">
+      <h2 id="p-geo-tit">Entidades</h2>
+      <p class="nota" id="p-geo-nota"></p>
+      <div class="grafica" id="p-geo"></div>
+      <details><summary>Ver datos</summary><div id="pt-geo"></div></details>
+    </article>
+    <article class="tarjeta tarjeta-completa">
+      <h2 id="p-clases-tit">Clases SCIAN</h2>
+      <p class="nota"><strong>C</strong> = dato confidencial (no publicado por INEGI). Montos en millones de pesos de 2023.</p>
+      <div class="tabla-cont"><table class="tabla" id="pt-clases"></table></div>
+    </article>
+  </section>
+
+  <!-- COMERCIO EXTERIOR -->
+  <section id="tab-comercio" class="tab" role="tabpanel" hidden>
+    <div class="aviso">
+      <p><strong>Importaciones de México</strong> de textiles, prendas y calzado (capítulos 50 a 64 del Sistema Armonizado), en millones de dólares corrientes, de todos los orígenes.
+      La fuente disponible no incluye exportaciones ni países de origen. <a href="ayuda.html#s-comercio">Cómo leerlo</a></p>
+    </div>
+    <div class="kpis" id="c-kpis"></div>
+    <div class="rejilla">
+      <article class="tarjeta">
+        <h2>Importaciones por grupo de productos</h2>
+        <p class="nota">Cada grupo se relaciona con un eslabón de la cadena nacional: lo que se importa compite con, o abastece a, ese eslabón.</p>
+        <div class="leyenda" id="ley-anios"></div>
+        <div class="grafica" id="c-grupos"></div>
+        <details><summary>Ver datos</summary><div id="ct-grupos"></div></details>
+      </article>
+      <article class="tarjeta">
+        <div class="tarjeta-cab">
+          <div><h2>Por capítulo</h2><p class="nota">Ordenados por valor del año elegido.</p></div>
+          <div class="segmentado segmentado-chico" role="radiogroup" aria-label="Año" id="c-anio"></div>
+        </div>
+        <div class="grafica" id="c-caps"></div>
+        <details><summary>Ver datos</summary><div id="ct-caps"></div></details>
+      </article>
+    </div>
+    <article class="tarjeta tarjeta-completa">
+      <h2>Lectura junto con la cadena nacional</h2>
+      <div id="c-lectura" class="lectura"></div>
+    </article>
+  </section>
+
+  <!-- FICHA MUNICIPAL -->
+  <section id="tab-ficha" class="tab" role="tabpanel" hidden>
+    <div class="ficha-barra">
+      <label for="ficha-buscar" class="flabel">Municipio</label>
+      <input type="search" id="ficha-buscar" list="ficha-lista" placeholder="Escribe un municipio…" autocomplete="off">
+      <datalist id="ficha-lista"></datalist>
+      <button type="button" class="boton-sec" id="ficha-mapa" disabled>Ver en el mapa</button>
+      <button type="button" class="boton-sec" id="ficha-imprimir" disabled>Imprimir</button>
+    </div>
+    <div id="ficha-cont"></div>
+  </section>
 </main>
 
 <footer class="pie">
-  <p><strong>Fuente:</strong> INEGI, Directorio Estadístico Nacional de Unidades Económicas (DENUE), 05/2026. Límites estatales: INEGI, Marco Geoestadístico, diciembre de 2025 (simplificados). Mapa base: © OpenStreetMap, © CARTO.</p>
+  <p><strong>Fuentes:</strong> INEGI, Directorio Estadístico Nacional de Unidades Económicas (DENUE), 05/2026. INEGI, Censos Económicos 2024, resultados definitivos (SAIC; año de referencia 2023). UN Comtrade, importaciones de México 2023–2025. Límites estatales: INEGI, Marco Geoestadístico, diciembre de 2025 (simplificados). Mapa base: © OpenStreetMap, © CARTO.</p>
   <p><strong>Alcance:</strong> 54 clases SCIAN de la cadena textil-moda-calzado; se excluye 463217 (pañales desechables). La clase 541490 incluye otros diseños especializados y se presenta como conjunto de candidatos. No se capturan establecimientos registrados en otras clases con moda como actividad secundaria.</p>
 </footer>
 
@@ -138,5 +223,6 @@
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script src="https://unpkg.com/deck.gl@9.0.38/dist.min.js"></script>
 <script src="app.js"></script>
+<script src="fase2.js"></script>
 </body>
 </html>

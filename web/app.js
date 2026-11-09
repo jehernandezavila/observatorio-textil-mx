@@ -1,5 +1,5 @@
-/* Observatorio Textil, Moda y Calzado MX — Fase 1
- * Datos: web/data (generados por preparar_datos.py)
+/* Observatorio Textil, Moda y Calzado MX — Fases 1 y 2
+ * Datos: web/data (preparar_datos.py y preparar_fase2.py). Fase 2 en fase2.js.
  * Todo se calcula en el navegador a partir de arreglos tipados.
  */
 "use strict";
@@ -22,6 +22,8 @@ const S = {
   r: null,          // resultados agregados del filtro
   tab: "panorama",
   modo: "puntos",
+  ce: null, comercio: null,   // Fase 2
+  ind: "po", fichaMun: null, anioCom: null,
   detalle: {},      // cache por entidad
 };
 
@@ -46,12 +48,14 @@ const CL_ETQ = ["Menor de 0.5", "0.5 a 0.8", "0.8 a 1.25 (similar al nacional)",
 
 /* ---------- carga ---------- */
 async function cargar() {
-  const [meta, buf, geo] = await Promise.all([
+  const [meta, buf, geo, ce, comercio] = await Promise.all([
     fetch("data/meta.json").then((r) => r.json()),
     fetch("data/puntos.bin").then((r) => r.arrayBuffer()),
     fetch("data/entidades.geojson").then((r) => r.json()),
+    fetch("data/ce2024.json").then((r) => r.json()),
+    fetch("data/comercio.json").then((r) => r.json()),
   ]);
-  S.meta = meta; S.n = meta.n; S.geo = geo;
+  S.meta = meta; S.n = meta.n; S.geo = geo; S.ce = ce; S.comercio = comercio;
   const T = { float32: Float32Array, uint16: Uint16Array, uint8: Uint8Array };
   for (const b of meta.binario) S[b.campo] = new T[b.tipo](buf, b.offset, meta.n);
   meta.entidades.forEach((e, i) => (S.entIdx[e.cve] = i));
@@ -59,6 +63,14 @@ async function cargar() {
   meta.municipios.forEach((m, i) => (S.munEnt[i] = S.entIdx[m[0].slice(0, 2)]));
   meta.capas.forEach((_, i) => S.f.capas.add(i));
   meta.tamanos.forEach((_, i) => S.f.tams.add(i));
+  // Conteos fijos por municipio × eslabón y municipio × tamaño (para la ficha municipal)
+  const nC = meta.capas.length, nM = meta.municipios.length;
+  S.munCapa = new Uint32Array(nM * nC); S.munTam = new Uint32Array(nM * 8); S.nacCapa = new Uint32Array(nC);
+  for (let i = 0; i < meta.n; i++) {
+    const m = S.mun[i], c = S.capa[i];
+    S.munCapa[m * nC + c]++; S.nacCapa[c]++;
+    S.munTam[m * 8 + (S.tam[i] === 255 ? 7 : S.tam[i])]++;
+  }
 }
 
 /* ---------- filtro y agregados ---------- */
@@ -141,7 +153,7 @@ function barraV(x, y0, w, h, r = 4) {
 }
 
 /** Barras horizontales. filas: {etq, valor, color, tip} */
-function graficaH(cont, filas, { anchoEtq = 190, fmtVal = (v) => fmt.format(v) } = {}) {
+function graficaH(cont, filas, { anchoEtq = 190, fmtVal = (v) => fmt.format(v), fmtTick = compacto, ref = null } = {}) {
   cont.innerHTML = "";
   const W = Math.max(280, cont.clientWidth);
   const etq = Math.min(anchoEtq, W * 0.42);
@@ -156,16 +168,17 @@ function graficaH(cont, filas, { anchoEtq = 190, fmtVal = (v) => fmt.format(v) }
   ticks.forEach((t) => {
     el("line", { x1: sx(t), x2: sx(t), y1: top, y2: H - abajo + 2, class: t === 0 ? "base" : "ret" }, svg);
     const tx = el("text", { x: sx(t), y: H - 6, "text-anchor": "middle", class: "tick" }, svg);
-    tx.textContent = compacto(t);
+    tx.textContent = fmtTick(t);
   });
+  if (ref != null && ref <= tmax) el("line", { x1: sx(ref), x2: sx(ref), y1: top - 2, y2: H - abajo + 2, class: "ref" }, svg);
   filas.forEach((f, i) => {
     const y = top + i * fila + (fila - alto) / 2;
     const g = el("g", { class: "fila" }, svg);
     const t = el("text", { x: etq - 8, y: y + alto / 2 + 4, "text-anchor": "end" }, g);
     t.textContent = recortar(f.etq, etq - 12);
-    el("path", { d: barraH(sx(0), y, sx(f.valor) - sx(0), alto), fill: f.color, class: "marca" }, g);
+    el("path", { d: barraH(sx(0), y, sx(f.valor) - sx(0), alto), fill: f.color, class: "marca" + (f.parcial ? " parcial" : "") }, g);
     const v = el("text", { x: sx(f.valor) + 6, y: y + alto / 2 + 4, class: "valor" }, g);
-    v.textContent = fmtVal(f.valor);
+    v.textContent = (f.parcial ? "≥ " : "") + fmtVal(f.valor);
     const hit = el("rect", { x: 0, y: top + i * fila, width: W, height: fila, class: "hit" }, g);
     hit.addEventListener("mousemove", (ev) => mostrarTip(f.tip, ev.clientX, ev.clientY));
     hit.addEventListener("mouseleave", ocultarTip);
@@ -325,11 +338,11 @@ function pintarMunicipios() {
   const total = filas.length;
   filas = filas.slice(0, 300);
   const t = $("#t-mun");
-  t.innerHTML = `<thead><tr><th>#</th><th>Municipio</th><th>Entidad</th><th class="num">Establecimientos</th><th class="num">% del sector en el municipio</th><th class="num">CL</th></tr></thead><tbody>${filas
+  t.innerHTML = `<thead><tr><th>#</th><th>Municipio</th><th>Entidad</th><th class="num">Establecimientos</th><th class="num">% del sector en el municipio</th><th class="num">CL</th><th><span class="sr">Ficha</span></th></tr></thead><tbody>${filas
     .map((m, i) => {
       const c = cl(m);
-      return `<tr class="clic" data-mun="${m}" tabindex="0"><td class="num">${i + 1}</td><td>${esc(M.municipios[m][1])}</td><td>${esc(M.entidades[S.munEnt[m]].nombre)}</td><td class="num">${fmt.format(r.selMun[m])}</td><td class="num">${pct(r.selMun[m], r.allMun[m])}</td><td class="num ${c >= 1.25 ? "cl-alto" : ""}">${c == null ? "—" : fmt2.format(c)}</td></tr>`;
-    }).join("")}</tbody>${total > 300 ? `<tfoot><tr><td colspan="6" class="nota">Se muestran 300 de ${fmt.format(total)} municipios. Usa la búsqueda para encontrar otros.</td></tr></tfoot>` : ""}`;
+      return `<tr class="clic" data-mun="${m}" tabindex="0"><td class="num">${i + 1}</td><td>${esc(M.municipios[m][1])}</td><td>${esc(M.entidades[S.munEnt[m]].nombre)}</td><td class="num">${fmt.format(r.selMun[m])}</td><td class="num">${pct(r.selMun[m], r.allMun[m])}</td><td class="num ${c >= 1.25 ? "cl-alto" : ""}">${c == null ? "—" : fmt2.format(c)}</td><td><button type="button" class="enlace" data-ficha="${m}">Ficha</button></td></tr>`;
+    }).join("")}</tbody>${total > 300 ? `<tfoot><tr><td colspan="7" class="nota">Se muestran 300 de ${fmt.format(total)} municipios. Usa la búsqueda para encontrar otros.</td></tr></tfoot>` : ""}`;
   if (r.todasCapas) {
     t.querySelector("thead th:last-child").title = "Selecciona uno o varios eslabones para calcular el CL";
   }
@@ -508,6 +521,7 @@ async function clicMapa(info) {
     <dt>Municipio</dt><dd>${esc(M.municipios[S.mun[i]][1])}</dd>
     <dt>Entidad</dt><dd>${esc(ent.nombre)}</dd>
     <dt>Alta DENUE</dt><dd>${S.anio[i] < 255 ? M.anio_base + S.anio[i] : "—"}</dd></dl>
+    <p><button type="button" class="enlace" data-ficha="${S.mun[i]}">Ver ficha del municipio</button></p>
     <p class="nota">Fuente: DENUE 05/2026. Los datos de contacto se consultan en el propio DENUE.</p>`;
 }
 
@@ -624,8 +638,12 @@ function construirFiltros() {
   });
   $("#mun-buscar").addEventListener("input", pintarMunicipios);
   $("#mun-orden").addEventListener("change", pintarMunicipios);
-  $("#t-mun").addEventListener("click", (ev) => { const tr = ev.target.closest("tr[data-mun]"); if (tr) irAMunicipio(+tr.dataset.mun); });
-  $("#t-mun").addEventListener("keydown", (ev) => { const tr = ev.target.closest("tr[data-mun]"); if (tr && ev.key === "Enter") irAMunicipio(+tr.dataset.mun); });
+  $("#t-mun").addEventListener("click", (ev) => {
+    const b = ev.target.closest("[data-ficha]"); if (b) { abrirFicha(+b.dataset.ficha); return; }
+    const tr = ev.target.closest("tr[data-mun]"); if (tr) irAMunicipio(+tr.dataset.mun);
+  });
+  $("#mapa-info").addEventListener("click", (ev) => { const b = ev.target.closest("[data-ficha]"); if (b) abrirFicha(+b.dataset.ficha); });
+  $("#t-mun").addEventListener("keydown", (ev) => { if (ev.target.closest("button")) return; const tr = ev.target.closest("tr[data-mun]"); if (tr && ev.key === "Enter") irAMunicipio(+tr.dataset.mun); });
 
   document.querySelectorAll(".pestanas button").forEach((b) => b.addEventListener("click", () => cambiarTab(b.dataset.tab)));
   document.querySelectorAll(".segmentado button").forEach((b) => b.addEventListener("click", () => { S.modo = b.dataset.modo; marcarModo(); pintarActual(); }));
@@ -636,10 +654,14 @@ function sincronizarChips() {
 }
 function marcarModo() { document.querySelectorAll(".segmentado button").forEach((b) => b.setAttribute("aria-checked", b.dataset.modo === S.modo)); }
 
+const TABS = ["panorama", "mapa", "cadena", "perfil", "comercio", "ficha"];
 function cambiarTab(t) {
   S.tab = t;
   document.querySelectorAll(".pestanas button").forEach((b) => b.setAttribute("aria-selected", b.dataset.tab === t));
-  ["panorama", "mapa", "cadena"].forEach((n) => ($("#tab-" + n).hidden = n !== t));
+  TABS.forEach((n) => ($("#tab-" + n).hidden = n !== t));
+  // Filtros: el comercio exterior y la ficha municipal no los usan; el perfil CE2024 no usa el tamaño
+  $(".filtros").hidden = t === "comercio" || t === "ficha";
+  $("#filtro-tam").classList.toggle("inactivo", t === "perfil");
   try { localStorage.setItem("obs-tab", t); } catch (e) { /* sin almacenamiento */ }
   pintarActual();
   if (t === "mapa") { iniciarMapa(); MAPA.map.resize(); }
@@ -658,6 +680,8 @@ function escribirHash() {
   if (S.f.capas.size < M.capas.length) p.push("capas=" + [...S.f.capas].sort((a, b) => a - b).join(","));
   if (S.f.tams.size < M.tamanos.length) p.push("tam=" + [...S.f.tams].sort((a, b) => a - b).join(","));
   if (S.modo !== "puntos") p.push("modo=" + S.modo);
+  if (S.tab === "perfil" && S.ind !== "po") p.push("ind=" + S.ind);
+  if (S.tab === "ficha" && S.fichaMun != null) p.push("mun=" + S.meta.municipios[S.fichaMun][0]);
   try { history.replaceState(null, "", "#" + p.join("&")); } catch (e) { /* nada */ }
 }
 function leerHash() {
@@ -667,7 +691,9 @@ function leerHash() {
   let tab = null;
   for (const p of partes) {
     const [k, v = ""] = p.split("=");
-    if (["panorama", "mapa", "cadena"].includes(k)) tab = k;
+    if (TABS.includes(k)) tab = k;
+    else if (k === "ind" && IND[v]) S.ind = v;
+    else if (k === "mun") { const m = M.municipios.findIndex((x) => x[0] === v); if (m >= 0) S.fichaMun = m; }
     else if (k === "ent" && S.entIdx[v] !== undefined) $("#f-ent").value = v;
     else if (k === "capas") { const l = lista(v, M.capas.length); if (l.length) S.f.capas = new Set(l); }
     else if (k === "tam") { const l = lista(v, M.tamanos.length); if (l.length) S.f.tams = new Set(l); }
@@ -682,7 +708,10 @@ function pintarActual() {
   escribirHash();
   if (S.tab === "panorama") pintarPanorama();
   else if (S.tab === "mapa") pintarMapa();
-  else pintarCadena();
+  else if (S.tab === "cadena") pintarCadena();
+  else if (S.tab === "perfil") pintarPerfil();
+  else if (S.tab === "comercio") pintarComercio();
+  else pintarFicha();
 }
 
 /* ---------- arranque ---------- */
@@ -696,6 +725,7 @@ function pintarActual() {
   }
   $("#cargando").remove();
   construirFiltros();
+  construirFase2();
   let t0 = leerHash();
   calcular();
   if (!t0) { try { t0 = localStorage.getItem("obs-tab"); } catch (e) { /* nada */ } }

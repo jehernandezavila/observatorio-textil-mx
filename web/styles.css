@@ -213,3 +213,36 @@ details .tabla-cont { max-height: 300px; margin-top: .4rem; }
   .mapa-cont { height: 62vh; }
   .filtros { position: static; }
 }
+
+/* ---------- Fase 2 ---------- */
+.filtros[hidden], .tab[hidden] { display: none !important; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.filtro.inactivo { opacity: .4; pointer-events: none; }
+.aviso { background: var(--lavado); border: 1px solid var(--borde); border-radius: 10px; padding: .6rem .9rem; margin-bottom: 1rem; font-size: .88rem; color: var(--tinta-2); }
+.aviso p { margin: 0; max-width: 130ch; }
+.selector-ind { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin: 0 0 1rem; }
+.selector-ind .segmentado { flex: 0 1 760px; }
+.segmentado-chico { flex: none; }
+.segmentado-chico button { padding: .3rem .7rem; }
+.grafica .marca.parcial { opacity: .45; }
+.grafica .ref { stroke: var(--tinta-2); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.grafica .valor.chico { font-size: 11px; }
+.lectura p { margin: .4rem 0; max-width: 110ch; }
+.ficha-barra { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .8rem; margin-bottom: 1rem; }
+.ficha-barra input { flex: 0 1 380px; min-width: 220px; }
+.ficha-barra .boton-sec:disabled { opacity: .45; cursor: default; }
+.ficha-cab { margin: .2rem 0 1rem; }
+.ceja-ficha { margin: 0; font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--tinta-2); }
+.ficha-tit { font-size: clamp(1.4rem, 3vw, 2rem); letter-spacing: -.02em; margin-top: .2rem; }
+.ficha-pie { margin-top: 1rem; }
+.sugerencias { display: flex; flex-wrap: wrap; gap: .4rem; }
+.sugerencias .chip { font-size: .85rem; padding: .3rem .75rem; }
+
+@media print {
+  .cabecera .pestanas, .filtros, .ficha-barra, .pie, .tooltip, details summary { display: none !important; }
+  .cabecera { background: none; color: #000; }
+  .cabecera .subt, .cabecera .ceja { color: #333; }
+  body { background: #fff; }
+  .tarjeta, .kpi { break-inside: avoid; border-color: #ccc; }
+  .tabla-cont { max-height: none; overflow: visible; }
+}
