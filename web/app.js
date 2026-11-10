@@ -246,15 +246,16 @@ function leyendaSeg(cont) {
 /* ---------- PANORAMA ---------- */
 function pintarPanorama() {
   const r = S.r, M = S.meta;
-  const porSeg = [0, 0, 0];
+  const porSeg = M.segmentos.map(() => 0);
   M.capas.forEach((c, i) => (porSeg[c.segmento] += r.porCapa[i]));
   const micro = r.porTam[0];
   const ambito = S.f.ent ? M.entidades[r.entSel].nombre : "México";
   $("#kpis").innerHTML = [
     { etq: "Establecimientos", val: fmt.format(r.k), sub: ambito },
-    { etq: "Manufactura", val: fmt.format(porSeg[0]), sub: pct(porSeg[0], r.k) + " del total", seg: 0 },
-    { etq: "Comercio", val: fmt.format(porSeg[1]), sub: pct(porSeg[1], r.k) + " del total", seg: 1 },
-    { etq: "Diseño (candidatos)", val: fmt.format(porSeg[2]), sub: "Clase 541490, no exclusiva de moda", seg: 2 },
+    { etq: "Manufactura textil y confección", val: fmt.format(porSeg[0]), sub: pct(porSeg[0], r.k) + " del total", seg: 0 },
+    { etq: "Manufactura de cuero y calzado", val: fmt.format(porSeg[1]), sub: pct(porSeg[1], r.k) + " del total", seg: 1 },
+    { etq: "Comercio", val: fmt.format(porSeg[2]), sub: pct(porSeg[2], r.k) + " del total", seg: 2 },
+    { etq: "Diseño (candidatos)", val: fmt.format(porSeg[3]), sub: "Clase 541490, no exclusiva de moda", seg: 3 },
     { etq: "Micronegocios (0 a 5 personas)", val: pct(micro, r.k), sub: fmt.format(micro) + " establecimientos" },
   ].map((k) => `<div class="kpi"><div class="etq">${k.seg !== undefined ? `<i class="punto" style="background:${colSeg(k.seg)}"></i>` : ""}${esc(k.etq)}</div><div class="val">${k.val}</div><div class="sub">${esc(k.sub)}</div></div>`).join("");
 
@@ -389,9 +390,9 @@ function iniciarMapa() {
 function construirPuntos() {
   // Orden de dibujo: comercio primero, manufactura encima, diseño al final
   const r = S.r, idx = r.idx, capas = S.meta.capas;
-  const orden = [1, 0, 2];
+  const orden = [2, 0, 1, 3];
   const pos = new Float32Array(r.k * 2), col = new Uint8Array(r.k * 4), map = new Uint32Array(r.k);
-  const rgb = [0, 1, 2].map((s) => hexRgb(colSeg(s)));
+  const rgb = S.meta.segmentos.map((_, s) => hexRgb(colSeg(s)));
   const alfa = r.k > 100000 ? 150 : r.k > 20000 ? 190 : 230;
   let j = 0;
   for (const seg of orden) {

@@ -29,21 +29,21 @@ AQUI = Path(__file__).resolve().parent
 GPKG = AQUI.parent / "DENUE_textil_moda.gpkg"
 SALIDA = AQUI / "web" / "data"
 
-# Orden de la cadena de valor. segmento: 0 manufactura, 1 comercio, 2 diseño
+# Orden de la cadena de valor. segmento: 0 manufactura textil, 1 manufactura de cuero y calzado, 2 comercio, 3 diseño
 CAPAS = [
     ("insumos_textiles", "Insumos y acabado textil", "313", 0, "Fibras, hilos, telas y acabado"),
     ("productos_textiles", "Productos textiles", "314", 0, "Blancos, cortinas, bordado, cordelería"),
     ("prendas_vestir", "Prendas de vestir", "315", 0, "Confección en serie y sobre medida"),
-    ("curtido", "Curtido de cuero", "3161", 0, "Curtido y acabado de cuero y piel"),
-    ("calzado_bolsos", "Calzado y bolsos", "3162 · 316991", 0, "Calzado, bolsos y maletas"),
-    ("mayoristas", "Comercio mayorista", "4321", 1, "Telas, cueros, ropa y calzado al por mayor"),
-    ("minoristas_textiles", "Tiendas de textiles", "4631", 1, "Telas, blancos y mercería"),
-    ("minoristas_moda", "Ropa y accesorios", "4632", 1, "Ropa, lencería, bisutería, sombreros"),
-    ("minoristas_calzado", "Zapaterías", "463310", 1, "Comercio al por menor de calzado"),
-    ("diseno_candidatos", "Diseño especializado (candidatos)", "541490", 2,
+    ("curtido", "Curtido de cuero", "3161", 1, "Curtido y acabado de cuero y piel"),
+    ("calzado_bolsos", "Calzado y bolsos", "3162 · 316991", 1, "Calzado, bolsos y maletas"),
+    ("mayoristas", "Comercio mayorista", "4321", 2, "Telas, cueros, ropa y calzado al por mayor"),
+    ("minoristas_textiles", "Tiendas de textiles", "4631", 2, "Telas, blancos y mercería"),
+    ("minoristas_moda", "Ropa y accesorios", "4632", 2, "Ropa, lencería, bisutería, sombreros"),
+    ("minoristas_calzado", "Zapaterías", "463310", 2, "Comercio al por menor de calzado"),
+    ("diseno_candidatos", "Diseño especializado (candidatos)", "541490", 3,
      "Diseño de modas y otros diseños; no es exclusivo de moda"),
 ]
-SEGMENTOS = ["Manufactura", "Comercio", "Diseño (candidatos)"]
+SEGMENTOS = ["Manufactura textil y confección", "Manufactura de cuero y calzado", "Comercio", "Diseño (candidatos)"]
 
 TAMANOS = ["0 a 5", "6 a 10", "11 a 30", "31 a 50", "51 a 100", "101 a 250", "251 y más"]
 ANIO_BASE = 2010

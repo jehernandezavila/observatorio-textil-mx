@@ -12,9 +12,10 @@
   --cab-fondo: #143f35;
   --cab-tinta: #ffffff;
   --cab-tenue: #c6e7d7;
-  --seg-0: #2a78d6;   /* manufactura */
-  --seg-1: #eb6834;   /* comercio */
-  --seg-2: #1baf7a;   /* diseño */
+  --seg-0: #2a78d6;   /* manufactura textil y confección */
+  --seg-1: #eda100;   /* manufactura de cuero y calzado */
+  --seg-2: #e87ba4;   /* comercio */
+  --seg-3: #008300;   /* diseño */
   --barra: #5b6670;   /* serie única neutra */
   --lavado: rgba(42, 120, 214, 0.08);
 }
@@ -32,8 +33,9 @@
     --acento: #3987e5;
     --cab-fondo: #10302a;
     --seg-0: #3987e5;
-    --seg-1: #d95926;
-    --seg-2: #199e70;
+    --seg-1: #c98500;
+    --seg-2: #d55181;
+    --seg-3: #008300;
     --barra: #9aa3ab;
     --lavado: rgba(57, 135, 229, 0.12);
   }
@@ -51,8 +53,9 @@
   --acento: #3987e5;
   --cab-fondo: #10302a;
   --seg-0: #3987e5;
-  --seg-1: #d95926;
-  --seg-2: #199e70;
+  --seg-1: #c98500;
+  --seg-2: #d55181;
+  --seg-3: #008300;
   --barra: #9aa3ab;
   --lavado: rgba(57, 135, 229, 0.12);
 }
