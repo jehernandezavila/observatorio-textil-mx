@@ -7,6 +7,7 @@
 <meta name="description" content="Manual de operación del Observatorio Textil, Moda y Calzado MX e interpretación de sus indicadores.">
 <link rel="stylesheet" href="styles.css">
 <style>
+  @media (max-width: 760px) { .ayuda .tabla { display: block; overflow-x: auto; } .ayuda { overflow-wrap: anywhere; } }
   .ayuda { max-width: 1120px; margin: 0 auto; padding: 1.5rem 16px 3rem; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 2rem; align-items: start; }
   .indice { position: sticky; top: 1rem; font-size: .88rem; border-left: 3px solid var(--eje); padding-left: .9rem; }
   .indice p { margin: 0 0 .4rem; font-weight: 650; }
@@ -41,9 +42,12 @@
 <body>
 <header class="cabecera">
   <div class="cabecera-int">
+    <span class="logo"><img src="img/fundamentally.png" alt="Fundamentally" width="601" height="645"></span>
+    <div class="cabecera-txt">
     <p class="ceja">Manual de operación</p>
     <h1>Cómo usar e interpretar el Observatorio</h1>
     <p class="subt">Guía para operar la página y leer correctamente sus indicadores.</p>
+    </div>
   </div>
   <nav class="pestanas"><a class="volver" href="index.html">← Volver al Observatorio</a></nav>
 </header>

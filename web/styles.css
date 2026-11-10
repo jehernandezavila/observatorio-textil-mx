@@ -71,7 +71,11 @@ a { color: var(--acento); }
 
 /* Cabecera */
 .cabecera { background: var(--cab-fondo); color: var(--cab-tinta); }
-.cabecera-int { max-width: 1320px; margin: 0 auto; padding: 1.6rem 16px .8rem; }
+.cabecera-int { max-width: 1320px; margin: 0 auto; padding: 1.6rem 16px .8rem; display: flex; gap: 1.1rem; align-items: center; }
+.cabecera-txt { min-width: 0; }
+.logo { flex: none; display: block; line-height: 0; }
+.logo img { width: 72px; height: auto; border-radius: 6px; }
+@media (max-width: 560px) { .logo img { width: 52px; } .cabecera-int { gap: .8rem; } }
 .ceja { margin: 0; color: var(--cab-tenue); font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .cabecera h1 { font-size: clamp(1.4rem, 3.4vw, 2.1rem); margin: .3rem 0; letter-spacing: -.02em; }
 .subt { margin: 0; color: #dfeee8; max-width: 60ch; }
