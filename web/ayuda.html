@@ -69,6 +69,7 @@
       <li><a href="#s-perfil">Perfil económico (Censos 2024)</a></li>
       <li><a href="#s-comercio">Comercio exterior</a></li>
       <li><a href="#s-ficha">Ficha municipal</a></li>
+      <li><a href="#s-circular">Economía circular</a></li>
     </ol>
   </nav>
 
@@ -335,6 +336,27 @@
     <li>La URL guarda el municipio (por ejemplo <code>#ficha&amp;mun=11020</code>). Puedes enviarla como enlace directo a la ficha.</li>
   </ul>
 </section>
+
+<section id="s-circular">
+  <h2>14. Economía circular</h2>
+  <p>Ubica a los establecimientos que pueden recibir, transformar o revender residuos y prendas usadas, y los cruza con las plantas manufactureras grandes que generan merma. Los datos son del DENUE 05/2026. Aplican los filtros de entidad y de personal ocupado; el de eslabones no.</p>
+  <table class="tabla">
+    <thead><tr><th>Tipo</th><th>Clase SCIAN</th><th>Cómo leerlo</th></tr></thead>
+    <tbody>
+      <tr><td>Transformación textil</td><td>314993 Fabricación de productos textiles reciclados (borras y estopas)</td><td>La única clase exclusivamente textil: convierte desperdicio en fibra, borra o estopa.</td></tr>
+      <tr><td>Acopio mayorista de desechos</td><td>434319 Comercio al por mayor de otros materiales de desecho</td><td>Compra y vende materiales para reciclaje. Casi siempre es multimaterial (cartón, metal, plástico).</td></tr>
+      <tr><td>Recuperación de residuos</td><td>562921 (sector privado) y 562922 (sector público)</td><td>Acopio, clasificación y compactación. También multimaterial.</td></tr>
+      <tr><td>Comercio de artículos usados</td><td>466410 Comercio al por menor de artículos usados</td><td>Reúso: ropa, pacas, calzado y otros artículos. Se dibuja en gris y debajo de los demás.</td></tr>
+    </tbody>
+  </table>
+  <h3>Marca por nombre</h3>
+  <p>Como el acopio y la recuperación no distinguen materiales, se marca al establecimiento cuyo nombre o razón social menciona textiles (textil, tela, trapo, borra, estopa, hilacha, retazo), piel o cuero (piel, pedacería, suela, carnaza, vaqueta), ropa o pacas, o calzado. En el mapa, los acopiadores y recuperadores marcados llevan un aro. La marca es <strong>indicativa</strong>: un acopiador puede recibir textiles sin decirlo en su nombre, y otro puede mencionarlos sin manejarlos ya. Antes de usar el directorio para un piloto hay que confirmar por teléfono qué materiales recibe, cuánto y a qué precio.</p>
+  <h3>Plantas grandes y recuperadores por municipio</h3>
+  <p>La tabla compara, en cada municipio, las plantas de más de 30 personas (textiles y de cuero y calzado) con los establecimientos de recuperación. Un municipio con muchas plantas grandes y cero transformadores o acopiadores con nombre textil o de piel es un candidato a ruta de acopio. Al hacer clic en una fila, el mapa se acerca al municipio. En el mapa, las plantas grandes son círculos huecos con el color de su segmento (puedes ocultarlas).</p>
+  <h3>Directorio y descarga</h3>
+  <p>El directorio lista los establecimientos de los tipos seleccionados, primero los transformadores y los acopiadores y recuperadores marcados. Muestra hasta 300 filas; usa la búsqueda o <em>Descargar CSV</em> para obtener todos los filtrados, con domicilio, teléfono, correo, sitio web y coordenadas (el CSV abre en Excel y en QGIS). Para los comercios de usados solo se incluye el nombre. La URL guarda la vista, por ejemplo <code>#circular&amp;ent=11&amp;cm=1</code>.</p>
+</section>
+
 
 
   </div>

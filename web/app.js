@@ -618,7 +618,7 @@ function construirFiltros() {
   $("#f-capas").innerHTML = M.capas.map((c, i) => `<button type="button" class="chip" data-capa="${i}" aria-pressed="true" title="SCIAN ${esc(c.scian)} · ${esc(c.descripcion)}"><i class="punto" style="background:${colSeg(c.segmento)}"></i>${esc(c.nombre)}</button>`).join("");
   $("#f-tam").innerHTML = M.tamanos.map((t, i) => `<button type="button" class="chip" data-tam="${i}" aria-pressed="true">${esc(t)}</button>`).join("");
 
-  $("#f-ent").addEventListener("change", () => { aplicar(); encuadrarEnt(); });
+  $("#f-ent").addEventListener("change", () => { aplicar(); encuadrarEnt(); encuadrarCI(); });
   $("#f-capas").addEventListener("click", (ev) => {
     const b = ev.target.closest("[data-capa]"); if (!b) return;
     const k = +b.dataset.capa;
@@ -635,7 +635,7 @@ function construirFiltros() {
   });
   $("#f-reset").addEventListener("click", () => {
     $("#f-ent").value = ""; M.capas.forEach((_, i) => S.f.capas.add(i)); M.tamanos.forEach((_, i) => S.f.tams.add(i));
-    sincronizarChips(); aplicar(); encuadrarEnt();
+    sincronizarChips(); aplicar(); encuadrarEnt(); encuadrarCI();
   });
   $("#mun-buscar").addEventListener("input", pintarMunicipios);
   $("#mun-orden").addEventListener("change", pintarMunicipios);
@@ -655,7 +655,7 @@ function sincronizarChips() {
 }
 function marcarModo() { document.querySelectorAll(".segmentado button").forEach((b) => b.setAttribute("aria-checked", b.dataset.modo === S.modo)); }
 
-const TABS = ["panorama", "mapa", "cadena", "perfil", "comercio", "ficha"];
+const TABS = ["panorama", "mapa", "cadena", "perfil", "comercio", "ficha", "circular"];
 function cambiarTab(t) {
   S.tab = t;
   document.querySelectorAll(".pestanas button").forEach((b) => b.setAttribute("aria-selected", b.dataset.tab === t));
@@ -663,9 +663,11 @@ function cambiarTab(t) {
   // Filtros: el comercio exterior y la ficha municipal no los usan; el perfil CE2024 no usa el tamaño
   $(".filtros").hidden = t === "comercio" || t === "ficha";
   $("#filtro-tam").classList.toggle("inactivo", t === "perfil");
+  $("#filtro-capas").classList.toggle("inactivo", t === "circular");
   try { localStorage.setItem("obs-tab", t); } catch (e) { /* sin almacenamiento */ }
   pintarActual();
   if (t === "mapa") { iniciarMapa(); MAPA.map.resize(); }
+  if (t === "circular" && CI.map) CI.map.resize();
 }
 
 function aplicar() {
@@ -683,6 +685,8 @@ function escribirHash() {
   if (S.modo !== "puntos") p.push("modo=" + S.modo);
   if (S.tab === "perfil" && S.ind !== "po") p.push("ind=" + S.ind);
   if (S.tab === "ficha" && S.fichaMun != null) p.push("mun=" + S.meta.municipios[S.fichaMun][0]);
+  if (S.tab === "circular" && CI.grupos.size < 4) p.push("cg=" + [...CI.grupos].sort().join(","));
+  if (S.tab === "circular" && CI.soloMarca) p.push("cm=1");
   try { history.replaceState(null, "", "#" + p.join("&")); } catch (e) { /* nada */ }
 }
 function leerHash() {
@@ -699,6 +703,8 @@ function leerHash() {
     else if (k === "capas") { const l = lista(v, M.capas.length); if (l.length) S.f.capas = new Set(l); }
     else if (k === "tam") { const l = lista(v, M.tamanos.length); if (l.length) S.f.tams = new Set(l); }
     else if (k === "modo" && ["puntos", "conteo", "cl"].includes(v)) S.modo = v;
+    else if (k === "cg") { const l = lista(v, 4); if (l.length) CI.grupos = new Set(l); }
+    else if (k === "cm") CI.soloMarca = v === "1";
   }
   S.f.ent = $("#f-ent").value;
   sincronizarChips(); marcarModo();
@@ -712,6 +718,7 @@ function pintarActual() {
   else if (S.tab === "cadena") pintarCadena();
   else if (S.tab === "perfil") pintarPerfil();
   else if (S.tab === "comercio") pintarComercio();
+  else if (S.tab === "circular") pintarCircular();
   else pintarFicha();
 }
 
@@ -727,15 +734,17 @@ function pintarActual() {
   $("#cargando").remove();
   construirFiltros();
   construirFase2();
+  construirCircular();
   let t0 = leerHash();
   calcular();
   if (!t0) { try { t0 = localStorage.getItem("obs-tab"); } catch (e) { /* nada */ } }
   t0 = t0 || "panorama";
   cambiarTab(t0);
   let pend;
-  new ResizeObserver(() => { clearTimeout(pend); pend = setTimeout(() => { if (S.tab !== "mapa") pintarActual(); }, 120); }).observe(document.querySelector("main"));
+  new ResizeObserver(() => { clearTimeout(pend); pend = setTimeout(() => { if (S.tab !== "mapa" && S.tab !== "circular") pintarActual(); }, 120); }).observe(document.querySelector("main"));
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
     pintarActual(); leyendaSeg($("#ley-seg"));
     if (MAPA.map) { MAPA.listo = false; MAPA.map.setStyle(estiloBase()); MAPA.map.once("styledata", () => { MAPA.listo = true; pintarMapa(); }); }
+    if (CI.map) { CI.listo = false; CI.map.setStyle(estiloBase()); CI.map.once("styledata", () => { CI.listo = true; pintarMapaCI(); }); }
   });
 })();

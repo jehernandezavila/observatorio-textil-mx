@@ -26,6 +26,11 @@ Requiere conexión a internet para las bibliotecas (MapLibre, deck.gl) y el mapa
   y capítulo del Sistema Armonizado (UN Comtrade).
 - **Ficha municipal** (Fase 2): resumen imprimible de un municipio: DENUE,
   especialización (CL) por eslabón y perfil censal.
+- **Economía circular**: transformadores textiles (314993), acopiadores de
+  desechos (434319), recuperadores (562921, 562922) y comercios de usados
+  (466410) del DENUE, con marca para quienes mencionan textiles, piel, ropa o
+  calzado en su nombre; cruce con las plantas de más de 30 personas por
+  municipio y directorio descargable en CSV.
 
 Los filtros (entidad, eslabones, personal ocupado) aplican a los tres apartados.
 La URL guarda la vista, p. ej. `#mapa&capas=4&modo=cl` (especialización en calzado).
@@ -66,6 +71,11 @@ python descargar_ce2024.py   # consulta el SAIC de INEGI -> fuentes/ce2024/
 python preparar_fase2.py     # -> web/data/ce2024.json y comercio.json
 ```
 `preparar_fase2.py` debe correr después de `preparar_datos.py` (usa `meta.json`).
+
+Economía circular (lee `../Reciclaje_textil_SCIAN_DENUE/.../DENUE_reciclaje_y_reuso_candidatos.csv`):
+```
+python preparar_circular.py  # -> web/data/circular.json
+```
 
 Para publicar los cambios en la página en línea: `git add -A`, `git commit` y
 `git push` desde esta carpeta; GitHub Pages se actualiza en 1 o 2 minutos.

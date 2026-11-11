@@ -253,3 +253,20 @@ details .tabla-cont { max-height: 300px; margin-top: .4rem; }
   .tarjeta, .kpi { break-inside: avoid; border-color: #ccc; }
   .tabla-cont { max-height: none; overflow: visible; }
 }
+
+/* Economía circular */
+.ci-controles { display: flex; flex-wrap: wrap; gap: .6rem 1.4rem; align-items: center; margin-bottom: 1rem; }
+.interruptor { display: inline-flex; gap: .45rem; align-items: center; font-size: .88rem; color: var(--tinta-2); cursor: pointer; }
+.interruptor input { accent-color: var(--acento); width: 16px; height: 16px; }
+#mapa-ci { position: absolute; inset: 0; }
+.ci-rejilla { margin-top: 1rem; margin-bottom: 1rem; }
+.ci-barra { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin: .4rem 0 .6rem; }
+.ci-barra input[type="search"] { flex: 1 1 260px; font: inherit; padding: .45rem .7rem; border: 1px solid var(--borde); border-radius: 8px; background: var(--superficie); color: var(--tinta); }
+.ci-barra select { font: inherit; padding: .35rem .5rem; border: 1px solid var(--borde); border-radius: 8px; background: var(--superficie); color: var(--tinta); }
+.escala-col { flex-direction: column; align-items: flex-start; }
+.escala .apagado { opacity: .4; }
+.escala i.aro { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--tinta); background: transparent; box-sizing: border-box; }
+.punto-ci { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: .45rem; vertical-align: middle; }
+.tabla td.cero { color: var(--tenue); }
+@media (min-width: 1100px) { .ci-rejilla { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); } }
+#ci-t-mun th { white-space: normal; vertical-align: bottom; min-width: 4.5rem; }

@@ -25,6 +25,7 @@
     <button role="tab" aria-selected="false" data-tab="perfil">Perfil económico</button>
     <button role="tab" aria-selected="false" data-tab="comercio">Comercio exterior</button>
     <button role="tab" aria-selected="false" data-tab="ficha">Ficha municipal</button>
+    <button role="tab" aria-selected="false" data-tab="circular">Economía circular</button>
     <a class="ayuda-enlace" href="ayuda.html">Ayuda e interpretación</a>
   </nav>
 </header>
@@ -34,7 +35,7 @@
     <label for="f-ent">Entidad</label>
     <select id="f-ent"><option value="">Todo el país</option></select>
   </div>
-  <div class="filtro filtro-ancho">
+  <div class="filtro filtro-ancho" id="filtro-capas">
     <span class="flabel">Eslabones <button class="enlace" id="f-capas-todas" type="button">todos</button></span>
     <div class="chips" id="f-capas"></div>
   </div>
@@ -214,10 +215,53 @@
     </div>
     <div id="ficha-cont"></div>
   </section>
+
+  <!-- ECONOMÍA CIRCULAR -->
+  <section id="tab-circular" class="tab" role="tabpanel" hidden>
+    <div class="aviso"><p>Establecimientos que reciclan, acopian, recuperan o revenden materiales, según su actividad en el DENUE. Solo la <strong>transformación textil</strong> (SCIAN 314993) es exclusivamente textil; el acopio y la recuperación suelen ser multimaterial. Por eso se marca a quienes mencionan textiles, piel, ropa o calzado en su nombre: es una señal indicativa que hay que verificar con cada establecimiento. Aplican los filtros de entidad y de personal ocupado.</p></div>
+    <div class="kpis" id="ci-kpis"></div>
+    <div class="ci-controles">
+      <div class="chips" id="ci-grupos" aria-label="Tipo de establecimiento"></div>
+      <label class="interruptor"><input type="checkbox" id="ci-marca"> Solo con nombre textil, de piel, de ropa o de calzado</label>
+      <label class="interruptor"><input type="checkbox" id="ci-plantas" checked> Mostrar plantas manufactureras de más de 30 personas</label>
+    </div>
+    <div class="mapa-layout">
+      <div class="mapa-cont"><div id="mapa-ci"></div></div>
+      <aside class="mapa-panel">
+        <div id="ci-leyenda" class="mapa-leyenda"></div>
+        <div id="ci-info" class="mapa-info"><p class="nota">Haz clic en un punto o en una fila del directorio para ver domicilio y teléfono.</p></div>
+      </aside>
+    </div>
+    <div class="rejilla ci-rejilla">
+      <article class="tarjeta">
+        <h2 id="ci-g-ent-tit">Entidades con más establecimientos seleccionados</h2>
+        <p class="nota">Según los tipos marcados arriba.</p>
+        <div class="grafica" id="ci-g-ent"></div>
+        <details><summary>Ver datos</summary><div id="ci-t-ent"></div></details>
+      </article>
+      <article class="tarjeta">
+        <h2>Generadores grandes y recuperadores por municipio</h2>
+        <p class="nota">Plantas manufactureras de más de 30 personas frente a los establecimientos de recuperación del mismo municipio. Un cero en transformadores o en acopiadores con nombre textil o de piel indica que hoy no hay un receptor especializado registrado cerca. Haz clic en una fila para verla en el mapa.</p>
+        <div class="ci-barra"><label for="ci-mun-orden" class="flabel">Ordenar por</label>
+          <select id="ci-mun-orden"><option value="total">Plantas grandes, total</option><option value="textil">Plantas textiles</option><option value="cuero">Plantas de cuero y calzado</option></select></div>
+        <div class="tabla-cont"><table class="tabla" id="ci-t-mun"></table></div>
+      </article>
+    </div>
+    <article class="tarjeta">
+      <h2>Directorio</h2>
+      <p class="nota">Establecimientos de los tipos seleccionados. Primero transformadores, recuperadores y acopiadores con nombre textil o de piel. El domicilio y el teléfono vienen del DENUE; para los comercios de usados solo se incluye el nombre.</p>
+      <div class="ci-barra">
+        <input type="search" id="ci-buscar" placeholder="Buscar por nombre o municipio…" autocomplete="off">
+        <button type="button" class="boton-sec" id="ci-csv">Descargar CSV</button>
+      </div>
+      <p class="nota" id="ci-dir-nota"></p>
+      <div class="tabla-cont"><table class="tabla" id="ci-t-dir"></table></div>
+    </article>
+  </section>
 </main>
 
 <footer class="pie">
-  <p><strong>Fuentes:</strong> INEGI, Directorio Estadístico Nacional de Unidades Económicas (DENUE), 05/2026. INEGI, Censos Económicos 2024, resultados definitivos (SAIC; año de referencia 2023). UN Comtrade, importaciones de México 2023–2025. Límites estatales: INEGI, Marco Geoestadístico, diciembre de 2025 (simplificados). Mapa base: © OpenStreetMap, © CARTO.</p>
+  <p><strong>Fuentes:</strong> INEGI, Directorio Estadístico Nacional de Unidades Económicas (DENUE), 05/2026. INEGI, Censos Económicos 2024, resultados definitivos (SAIC; año de referencia 2023). UN Comtrade, importaciones de México 2023–2025. Economía circular: DENUE 05/2026, clases 314993, 434319, 562921, 562922 y 466410. Límites estatales: INEGI, Marco Geoestadístico, diciembre de 2025 (simplificados). Mapa base: © OpenStreetMap, © CARTO.</p>
   <p><strong>Alcance:</strong> 54 clases SCIAN de la cadena textil-moda-calzado; se excluye 463217 (pañales desechables). La clase 541490 incluye otros diseños especializados y se presenta como conjunto de candidatos. No se capturan establecimientos registrados en otras clases con moda como actividad secundaria.</p>
 </footer>
 
@@ -227,5 +271,6 @@
 <script src="https://unpkg.com/deck.gl@9.0.38/dist.min.js"></script>
 <script src="app.js"></script>
 <script src="fase2.js"></script>
+<script src="circular.js"></script>
 </body>
 </html>
